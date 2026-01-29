@@ -1,0 +1,14 @@
+{
+  "name": "@impact-journal/core",
+  "version": "1.0.0",
+  "description": "Core business logic for Impact Journal",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

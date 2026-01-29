@@ -1,0 +1,17 @@
+{
+  "name": "@impact-journal/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP-server tool for Impact Journal",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@impact-journal/core": "workspace:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
