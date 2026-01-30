@@ -24,7 +24,7 @@ export async function requestDeviceCode(
       Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: `client_id=${clientId}&scope=repo,read:user`,
+    body: `client_id=${clientId}&scope=public_repo,read:user`,
   });
   const data = await response.json();
   return data;

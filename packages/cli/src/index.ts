@@ -1,4 +1,3 @@
-import { greet } from "@impact-journal/core";
+import { login } from "./commands/login";
 
-const message = greet("Gokhul");
-console.log(message);
+login();
