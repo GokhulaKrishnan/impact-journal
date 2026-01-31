@@ -4,6 +4,7 @@ import { logout } from "./commands/logout";
 import { status } from "./commands/status";
 import { sync } from "./commands/sync";
 import { summary } from "./commands/summary";
+import { standup } from "./commands/standup";
 
 const program = new Command();
 
@@ -34,5 +35,10 @@ program
   .description("Get the data summary")
   .option("-p, --period <period>", "Time Period: today, week, month", "week")
   .action((options) => summary(options.period));
+
+program
+  .command("standup")
+  .description("Generate standup message")
+  .action(standup);
 
 program.parse();
