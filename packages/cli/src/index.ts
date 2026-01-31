@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { login } from "./commands/login";
 import { logout } from "./commands/logout";
 import { status } from "./commands/status";
+import { sync } from "./commands/sync";
 
 const program = new Command();
 
@@ -22,4 +23,8 @@ program
   .description("Disconnect your GitHub account")
   .action(logout);
 
+program
+  .command("sync")
+  .description("Fetch latest GitHub activity")
+  .action(sync);
 program.parse();
