@@ -32,21 +32,21 @@ export async function summary(period: string = "week"): Promise<void> {
   );
 
   let totalCommits = 0;
-  const commitsByRepo: { [repo: string]: number } = {};
+  const commitsByRepo: { [repo: string]: string[] } = {};
 
   for (const repoName in githubData.commits) {
     const commits = githubData.commits[repoName];
-    let repoCount = 0;
+    const repoMessages: string[] = [];
 
     for (const commit of commits) {
       if (isWithinRange(new Date(commit.commit.author.date), start, today)) {
-        repoCount++;
+        repoMessages.push(commit.commit.message);
       }
     }
 
-    if (repoCount > 0) {
-      commitsByRepo[repoName] = repoCount;
-      totalCommits += repoCount;
+    if (repoMessages.length > 0) {
+      commitsByRepo[repoName] = repoMessages;
+      totalCommits += repoMessages.length;
     }
   }
 
@@ -55,16 +55,29 @@ export async function summary(period: string = "week"): Promise<void> {
   if (totalCommits > 0) {
     console.log("\nBy repository:");
     for (const repo in commitsByRepo) {
-      console.log(`${repo}: ${commitsByRepo[repo]} commits`);
+      console.log(`\n  ${repo}: ${commitsByRepo[repo].length} commits`);
+      for (const message of commitsByRepo[repo]) {
+        console.log(`    - ${message}`);
+      }
     }
   }
 
-  let prCount = 0;
+  const prsInRange: { title: string; repo: string; state: string }[] = [];
+
   for (const pr of githubData.pullRequests.items) {
     if (isWithinRange(new Date(pr.created_at), start, today)) {
-      prCount += 1;
+      prsInRange.push({
+        title: pr.title,
+        repo: pr.repository_url.split("/").pop(),
+        state: pr.state,
+      });
     }
   }
 
-  console.log(`\nPull requests: ${prCount}`);
+  console.log(`\nPull requests: ${prsInRange.length}`);
+  if (prsInRange.length > 0) {
+    for (const pr of prsInRange) {
+      console.log(`  - ${pr.title} [${pr.state}] (${pr.repo})`);
+    }
+  }
 }
