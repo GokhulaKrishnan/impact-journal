@@ -11,6 +11,14 @@ export {
   getRepoCommits,
   getUserPullRequests,
 } from "./services/github.js";
+
+export {
+  getStartOfWeek,
+  getStartOfMonth,
+  getStartOfDay,
+  isWithinRange,
+} from "./utils/dates.js";
+
 export function greet(name: string): string {
   return `Hello, ${name}!`;
 }

@@ -3,6 +3,7 @@ import { login } from "./commands/login";
 import { logout } from "./commands/logout";
 import { status } from "./commands/status";
 import { sync } from "./commands/sync";
+import { summary } from "./commands/summary";
 
 const program = new Command();
 
@@ -27,4 +28,11 @@ program
   .command("sync")
   .description("Fetch latest GitHub activity")
   .action(sync);
+
+program
+  .command("summary")
+  .description("Get the data summary")
+  .option("-p, --period <period>", "Time Period: today, week, month", "week")
+  .action((options) => summary(options.period));
+
 program.parse();
