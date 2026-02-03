@@ -1,5 +1,5 @@
 import { getAuthenticatedUser } from "@impact-journal/core";
-import { loadCredentials } from "../utils/config";
+import { loadCredentials } from "../utils/config.js";
 
 export async function status(): Promise<void> {
   const credential = await loadCredentials();

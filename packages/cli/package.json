@@ -1,6 +1,7 @@
 {
   "name": "@impact-journal/cli",
   "version": "1.0.0",
+  "type": "module",
   "description": "CLI tool for Impact Journal",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "@impact-journal/core": "workspace:*",
+    "clipboardy": "^5.2.1",
     "commander": "^14.0.2"
   },
   "keywords": [],

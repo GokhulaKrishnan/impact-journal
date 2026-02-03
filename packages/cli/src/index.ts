@@ -1,10 +1,10 @@
 import { Command } from "commander";
-import { login } from "./commands/login";
-import { logout } from "./commands/logout";
-import { status } from "./commands/status";
-import { sync } from "./commands/sync";
-import { summary } from "./commands/summary";
-import { standup } from "./commands/standup";
+import { login } from "./commands/login.js";
+import { logout } from "./commands/logout.js";
+import { status } from "./commands/status.js";
+import { sync } from "./commands/sync.js";
+import { summary } from "./commands/summary.js";
+import { standup } from "./commands/standup.js";
 
 const program = new Command();
 
@@ -39,6 +39,7 @@ program
 program
   .command("standup")
   .description("Generate standup message")
-  .action(standup);
+  .option("-c, --copy", "Copy to clipboard")
+  .action((options) => standup(options.copy));
 
 program.parse();

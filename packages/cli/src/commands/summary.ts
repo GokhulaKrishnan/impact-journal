@@ -4,7 +4,7 @@ import {
   getStartOfWeek,
   isWithinRange,
 } from "@impact-journal/core";
-import { loadData } from "../utils/config";
+import { loadData } from "../utils/config.js";
 
 export async function summary(period: string = "week"): Promise<void> {
   const githubData = await loadData();

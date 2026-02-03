@@ -1,7 +1,8 @@
 import { getStartOfDay, isWithinRange } from "@impact-journal/core";
-import { loadData } from "../utils/config";
+import { loadData } from "../utils/config.js";
+import clipboard from "clipboardy";
 
-export async function standup(): Promise<void> {
+export async function standup(copy: boolean = false): Promise<void> {
   const githubData = await loadData();
 
   if (!githubData) {
@@ -41,26 +42,35 @@ export async function standup(): Promise<void> {
     }
   }
 
-  console.log("\nSTANDUP\n");
-  console.log("Yesterday:");
+  let resText = "";
+
+  resText += "\nSTANDUP\n";
+  resText += "Yesterday:\n";
 
   if (totalCommits > 0) {
     for (const commit of yesterdayCommits) {
-      console.log(`  - ${commit.message} (${commit.repo})`);
+      resText += `  - ${commit.message} (${commit.repo})\n`;
     }
   } else {
-    console.log("  - No commits");
+    resText += "  - No commits\n";
   }
 
-  console.log("\nToday:");
+  resText += "\nToday:\n";
   if (openPrs.length > 0) {
     for (const pr of openPrs) {
-      console.log(`  - Work on: ${pr.title}`);
+      resText += `  - Work on: ${pr.title}\n`;
     }
   } else {
-    console.log("  - Continue current work");
+    resText += "  - Continue current work\n";
   }
 
-  console.log("\nBlockers:");
-  console.log("  - None");
+  resText += "\nBlockers:";
+  resText += "\n  - None";
+
+  console.log(resText);
+
+  if (copy) {
+    await clipboard.write(resText);
+    console.log("Copied to clipboard!");
+  }
 }

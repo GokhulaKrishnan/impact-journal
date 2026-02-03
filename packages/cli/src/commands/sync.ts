@@ -4,7 +4,7 @@ import {
   getUserPullRequests,
   getUserRepos,
 } from "@impact-journal/core";
-import { loadCredentials, saveData } from "../utils/config";
+import { loadCredentials, saveData } from "../utils/config.js";
 
 export async function sync(): Promise<void> {
   const credential = await loadCredentials();
