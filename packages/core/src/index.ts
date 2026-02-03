@@ -19,6 +19,8 @@ export {
   isWithinRange,
 } from "./utils/dates.js";
 
+export { createAiSummary } from "./services/ai.js";
+
 export function greet(name: string): string {
   return `Hello, ${name}!`;
 }

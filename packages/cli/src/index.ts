@@ -34,7 +34,8 @@ program
   .command("summary")
   .description("Get the data summary")
   .option("-p, --period <period>", "Time Period: today, week, month", "week")
-  .action((options) => summary(options.period));
+  .option("--ai", "Generate AI-powered summary")
+  .action((options) => summary(options.period, options.ai));
 
 program
   .command("standup")

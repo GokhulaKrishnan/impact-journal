@@ -5,8 +5,16 @@ import {
   isWithinRange,
 } from "@impact-journal/core";
 import { loadData } from "../utils/config.js";
+import dotenv from "dotenv";
+import path from "path";
+import { createAiSummary } from "@impact-journal/core";
 
-export async function summary(period: string = "week"): Promise<void> {
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+
+export async function summary(
+  period: string = "week",
+  useAi: boolean = false
+): Promise<void> {
   const githubData = await loadData();
 
   if (!githubData) {
@@ -78,6 +86,26 @@ export async function summary(period: string = "week"): Promise<void> {
   if (prsInRange.length > 0) {
     for (const pr of prsInRange) {
       console.log(`  - ${pr.title} [${pr.state}] (${pr.repo})`);
+    }
+  }
+
+  if (useAi) {
+    if (totalCommits === 0) {
+      console.log("\nNo commits to summarize.");
+    } else {
+      console.log("\n--- AI Summary ---\n");
+      const allCommits: string[] = [];
+      for (const repo in commitsByRepo) {
+        for (const message of commitsByRepo[repo]) {
+          allCommits.push(` ${message} (${repo})`);
+        }
+      }
+
+      const aiSummary = await createAiSummary(
+        allCommits,
+        process.env.GROQ_API_KEY || ""
+      );
+      console.log(aiSummary);
     }
   }
 }

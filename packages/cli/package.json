@@ -12,7 +12,8 @@
   "dependencies": {
     "@impact-journal/core": "workspace:*",
     "clipboardy": "^5.2.1",
-    "commander": "^14.0.2"
+    "commander": "^14.0.2",
+    "dotenv": "^17.2.3"
   },
   "keywords": [],
   "author": "",
