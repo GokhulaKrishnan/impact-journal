@@ -35,7 +35,8 @@ program
   .description("Get the data summary")
   .option("-p, --period <period>", "Time Period: today, week, month", "week")
   .option("--ai", "Generate AI-powered summary")
-  .action((options) => summary(options.period, options.ai));
+  .option("-c, --copy", "Copy to clipboard")
+  .action((options) => summary(options.period, options.ai, options.copy));
 
 program
   .command("standup")

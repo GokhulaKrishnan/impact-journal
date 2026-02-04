@@ -8,12 +8,14 @@ import { loadData } from "../utils/config.js";
 import dotenv from "dotenv";
 import path from "path";
 import { createAiSummary } from "@impact-journal/core";
+import clipboard from "clipboardy";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
 export async function summary(
   period: string = "week",
-  useAi: boolean = false
+  useAi: boolean = false,
+  copy: boolean = false
 ): Promise<void> {
   const githubData = await loadData();
 
@@ -58,14 +60,16 @@ export async function summary(
     }
   }
 
-  console.log(`\nTotal commits: ${totalCommits}`);
+  let resText = "";
+
+  resText += `\nTotal commits: ${totalCommits}\n`;
 
   if (totalCommits > 0) {
-    console.log("\nBy repository:");
+    resText += "\nBy repository:\n";
     for (const repo in commitsByRepo) {
-      console.log(`\n  ${repo}: ${commitsByRepo[repo].length} commits`);
+      resText += `\n   ${repo}: ${commitsByRepo[repo].length} commits\n`;
       for (const message of commitsByRepo[repo]) {
-        console.log(`    - ${message}`);
+        resText += `    - ${message}\n`;
       }
     }
   }
@@ -82,11 +86,16 @@ export async function summary(
     }
   }
 
-  console.log(`\nPull requests: ${prsInRange.length}`);
+  resText += `\nPull requests: ${prsInRange.length}`;
   if (prsInRange.length > 0) {
     for (const pr of prsInRange) {
-      console.log(`  - ${pr.title} [${pr.state}] (${pr.repo})`);
+      resText += `  - ${pr.title} [${pr.state}] (${pr.repo}) \n`;
     }
+  }
+  console.log(resText);
+  if (copy) {
+    await clipboard.write(resText);
+    console.log("Copied to clipboard!");
   }
 
   if (useAi) {
