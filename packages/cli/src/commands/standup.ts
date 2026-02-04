@@ -1,4 +1,4 @@
-import { getStartOfDay, isWithinRange } from "@impact-journal/core";
+import { generateStandup } from "@impact-journal/core";
 import { loadData } from "../utils/config.js";
 import clipboard from "clipboardy";
 
@@ -10,45 +10,14 @@ export async function standup(copy: boolean = false): Promise<void> {
     return;
   }
 
-  const openPrs = githubData.pullRequests.items.filter(
-    (pr: { state: string }) => pr.state == "open"
-  );
-
-  const today = new Date();
-  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
-
-  const yesterdayStart = getStartOfDay(yesterday);
-  const yesterdayEnd = getStartOfDay(today);
-
-  const yesterdayCommits: { repo: string; message: string }[] = [];
-  let totalCommits = 0;
-  for (const repoName in githubData.commits) {
-    const commits = githubData.commits[repoName];
-
-    for (const commit of commits) {
-      if (
-        isWithinRange(
-          new Date(commit.commit.author.date),
-          yesterdayStart,
-          yesterdayEnd
-        )
-      ) {
-        yesterdayCommits.push({
-          repo: repoName,
-          message: commit.commit.message,
-        });
-        totalCommits += 1;
-      }
-    }
-  }
+  const result = generateStandup(githubData);
 
   let resText = "";
-
-  resText += "\nSTANDUP\n";
+  resText += "\nSTANDUP\n\n";
   resText += "Yesterday:\n";
 
-  if (totalCommits > 0) {
-    for (const commit of yesterdayCommits) {
+  if (result.yesterdayCommits.length > 0) {
+    for (const commit of result.yesterdayCommits) {
       resText += `  - ${commit.message} (${commit.repo})\n`;
     }
   } else {
@@ -56,16 +25,16 @@ export async function standup(copy: boolean = false): Promise<void> {
   }
 
   resText += "\nToday:\n";
-  if (openPrs.length > 0) {
-    for (const pr of openPrs) {
+  if (result.openPrs.length > 0) {
+    for (const pr of result.openPrs) {
       resText += `  - Work on: ${pr.title}\n`;
     }
   } else {
     resText += "  - Continue current work\n";
   }
 
-  resText += "\nBlockers:";
-  resText += "\n  - None";
+  resText += "\nBlockers:\n";
+  resText += "  - None";
 
   console.log(resText);
 

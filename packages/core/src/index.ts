@@ -21,6 +21,9 @@ export {
 
 export { createAiSummary } from "./services/ai.js";
 
+export { generateSummary, type SummaryResult } from "./services/summary.js";
+export { generateStandup, type StandupResult } from "./services/standup.js";
+
 export function greet(name: string): string {
   return `Hello, ${name}!`;
 }
