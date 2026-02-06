@@ -26,6 +26,11 @@ export async function requestDeviceCode(
     },
     body: `client_id=${clientId}&scope=public_repo,read:user`,
   });
+
+  if (!response.ok) {
+    throw new Error(`Failed to start login: ${response.status}`);
+  }
+
   const data = await response.json();
   return data;
 }
@@ -57,6 +62,10 @@ export async function pollAccessToken(
         body: `client_id=${clientId}&device_code=${deviceCode}&grant_type=urn:ietf:params:oauth:grant-type:device_code`,
       }
     );
+
+    if (!response.ok) {
+      throw new Error(`Failed to start login: ${response.status}`);
+    }
 
     const data = await response.json();
 

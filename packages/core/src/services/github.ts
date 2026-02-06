@@ -1,3 +1,15 @@
+function handleApiError(response: Response): never {
+  if (response.status === 401) {
+    throw new Error(
+      "Invalid or expired token. Please run 'impact login' again."
+    );
+  } else if (response.status === 403) {
+    throw new Error("Rate limited by GitHub. Please wait a few minutes.");
+  } else {
+    throw new Error(`GitHub API error: ${response.status}`);
+  }
+}
+
 export async function getAuthenticatedUser(token: string) {
   const response = await fetch("https://api.github.com/user", {
     method: "GET",
@@ -7,6 +19,9 @@ export async function getAuthenticatedUser(token: string) {
     },
   });
 
+  if (!response.ok) {
+    handleApiError(response);
+  }
   const data = await response.json();
   return data;
 }
@@ -22,6 +37,10 @@ export async function getUserRepos(token: string) {
       },
     }
   );
+
+  if (!response.ok) {
+    handleApiError(response);
+  }
 
   const data = await response.json();
   return data;
@@ -56,6 +75,10 @@ export async function getRepoCommits(
     },
   });
 
+  if (!response.ok) {
+    handleApiError(response);
+  }
+
   const data = await response.json();
   return data;
 }
@@ -71,6 +94,10 @@ export async function getUserPullRequests(token: string, username: string) {
       },
     }
   );
+
+  if (!response.ok) {
+    handleApiError(response);
+  }
 
   const data = await response.json();
   return data;
