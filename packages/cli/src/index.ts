@@ -5,6 +5,7 @@ import { status } from "./commands/status.js";
 import { sync } from "./commands/sync.js";
 import { summary } from "./commands/summary.js";
 import { standup } from "./commands/standup.js";
+import { fileRisk } from "./commands/file-risk.js";
 
 const program = new Command();
 
@@ -43,5 +44,12 @@ program
   .description("Generate standup message")
   .option("-c, --copy", "Copy to clipboard")
   .action((options) => standup(options.copy));
+
+program
+  .command("file-risk <filename>")
+  .description("Analyze file stability and risk level")
+  .action(async (filename: string) => {
+    await fileRisk(filename);
+  });
 
 program.parse();

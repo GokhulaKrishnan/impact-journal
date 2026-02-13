@@ -1,10 +1,11 @@
 import {
   getAuthenticatedUser,
-  getRepoCommits,
+  getRepoCommitsWithFiles,
   getUserPullRequests,
   getUserRepos,
+  saveData,
 } from "@impact-journal/core";
-import { loadCredentials, saveData } from "../utils/config.js";
+import { loadCredentials } from "../utils/config.js";
 
 export async function sync(): Promise<void> {
   const credential = await loadCredentials();
@@ -27,11 +28,13 @@ export async function sync(): Promise<void> {
   const commitsByRepo: { [repoName: string]: any[] } = {};
 
   for (const repo of repos) {
-    const commits = await getRepoCommits(
+    const commits = await getRepoCommitsWithFiles(
       credential,
       repo.owner.login,
       repo.name,
-      user.login
+      user.login,
+      undefined,
+      100
     );
 
     if (Array.isArray(commits)) {
