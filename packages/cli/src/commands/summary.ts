@@ -1,5 +1,5 @@
 import { generateSummary, createAiSummary } from "@impact-journal/core";
-import { loadData } from "../utils/config.js";
+import { loadData } from "@impact-journal/core";
 import dotenv from "dotenv";
 import path from "path";
 import clipboard from "clipboardy";

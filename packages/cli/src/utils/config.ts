@@ -36,23 +36,3 @@ export async function deleteCredentials(): Promise<void> {
     await fs.unlink(getCredentialsPath());
   } catch (error) {}
 }
-
-export function getDataPath(): string {
-  const pathName = path.join(getConfigDir(), "data.json");
-  return pathName;
-}
-
-export async function saveData(data: object): Promise<void> {
-  await fs.mkdir(getConfigDir(), { recursive: true });
-
-  await fs.writeFile(getDataPath(), JSON.stringify(data, null, 2));
-}
-
-export async function loadData(): Promise<any | null> {
-  try {
-    const data = await fs.readFile(getDataPath(), "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    return null;
-  }
-}

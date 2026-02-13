@@ -1,6 +1,6 @@
 import { generateStandup } from "@impact-journal/core";
-import { loadData } from "../utils/config.js";
 import clipboard from "clipboardy";
+import { loadData } from "@impact-journal/core";
 
 export async function standup(copy: boolean = false): Promise<void> {
   const githubData = await loadData();
