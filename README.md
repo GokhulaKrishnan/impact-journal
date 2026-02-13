@@ -1,8 +1,8 @@
 # Impact Journal
 
-**Automatically track your GitHub activity. Generate standups, summaries, and performance‑ready narratives — instantly.**
+**Automatically track your GitHub activity. Generate standups, summaries, and performance-ready narratives — instantly.**
 
-Impact Journal is a developer‑focused CLI tool and MCP server that turns raw GitHub activity into structured, actionable insights. It eliminates the manual effort of recalling work, preparing standups, or writing performance review narratives.
+Impact Journal is a developer-focused CLI tool and MCP server that turns raw GitHub activity into structured, actionable insights. It eliminates the manual effort of recalling work, preparing standups, or writing performance review narratives.
 
 ---
 
@@ -14,8 +14,9 @@ Developers consistently lose time and clarity trying to reconstruct their own wo
 - **Performance Reviews** — digging through old PRs and commits
 - **Interviews** — struggling to recall project details
 - **Resume Updates** — manually rewriting accomplishments
+- **Code Changes** — accidentally destabilizing stable files
 
-This creates friction, reduces accuracy, and leads to under‑reported impact.
+This creates friction, reduces accuracy, and leads to under-reported impact.
 
 ---
 
@@ -25,9 +26,10 @@ Impact Journal automatically pulls your GitHub activity and generates:
 
 - Daily standups
 - Weekly/monthly summaries
-- AI‑powered narratives for performance reviews
-- Repository‑level breakdowns of commits, PRs, and reviews
-- Clipboard‑ready outputs for Slack, Notion, or email
+- AI-powered narratives for performance reviews
+- File risk analysis to prevent code destabilization
+- Repository-level breakdowns of commits, PRs, and reviews
+- Clipboard-ready outputs for Slack, Notion, or email
 
 Designed for reliability, speed, and zero manual tracking.
 
@@ -61,6 +63,9 @@ impact sync
 
 # 3. Generate summaries
 impact summary -p week
+
+# 4. Check file risk before making changes
+impact file-risk src/auth.ts
 ```
 
 ---
@@ -98,6 +103,54 @@ impact summary --copy           # Copy output to clipboard
 impact standup                  # Generate standup message
 impact standup --copy           # Copy to clipboard
 ```
+
+### File Risk Analysis
+
+```bash
+impact file-risk <filename>     # Analyze file stability and risk level
+```
+
+**Check if a file is safe to modify:**
+
+```bash
+impact file-risk packages/core/src/services/github.ts
+```
+
+**Output:**
+
+```
+Activity (last 90 days): 3 commits
+Repository average: 1.3 commits
+This file: 2.3x above average [WARNING]
+
+Bug fixes: 0/3 commits (0%)
+Repository average: 0%
+
+Stability trend:
+Baseline: 0 commits
+Recent: 3 commits
+Trend: Increasing (100%)
+
+RISK LEVEL: MEDIUM
+
+Reasons:
+  • Activity 2.3x above average
+  • Activity is increasing
+```
+
+**What it analyzes:**
+
+- Change frequency (vs repository average)
+- Bug fix density (% of commits fixing bugs)
+- Activity trends (stable → unstable transitions)
+- Risk assessment (HIGH/MEDIUM/LOW)
+
+**Use cases:**
+
+- Before refactoring stable code
+- Before touching unfamiliar files
+- Before making breaking changes
+- Identifying files in constant bug-fix mode
 
 ---
 
@@ -177,6 +230,14 @@ Ask Claude:
 - "What did I work on this week?"
 - "Generate a standup for me"
 - "Summarize my work this month"
+- "Should I modify bluetooth/connection.ts?"
+- "What's the risk of editing packages/core/src/services/github.ts?"
+
+### Available MCP Tools
+
+1. **get_summary** - Get work summary for a time period (today/week/month)
+2. **get_standup** - Generate standup message with yesterday's work
+3. **analyze_file_risk** - Analyze file stability and risk level
 
 ---
 
@@ -185,7 +246,7 @@ Ask Claude:
 ```
 impact-journal/
 ├── packages/
-│   ├── core/           # Shared business logic (GitHub API, parsing, summaries)
+│   ├── core/           # Shared business logic (GitHub API, parsing, summaries, file analysis)
 │   ├── cli/            # Command-line interface (Commander.js)
 │   └── mcp-server/     # MCP server for Claude Desktop
 ```
@@ -234,6 +295,19 @@ GROQ_API_KEY=your_groq_api_key_here
 ```
 
 Get a free API key at [console.groq.com](https://console.groq.com)
+
+---
+
+## Features
+
+- GitHub OAuth Device Flow authentication
+- Automatic data sync (commits, PRs, reviews with file details)
+- Work summaries (daily/weekly/monthly)
+- AI-powered summaries using Groq LLM
+- Standup message generation
+- File risk analysis and stability detection
+- MCP server for Claude Desktop integration
+- Copy to clipboard support
 
 ---
 
