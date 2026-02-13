@@ -5,6 +5,7 @@ import { z } from "zod";
 import { generateStandup, generateSummary } from "@impact-journal/core";
 import path from "path";
 import fs from "fs/promises";
+import { handleFileRisk } from "./tools/file-risk.js";
 
 const server = new McpServer({
   name: "impact-journal",
@@ -114,6 +115,25 @@ server.tool(
     result += "\nBlockers:\n";
     result += "  - None";
     return { content: [{ type: "text", text: result }] };
+  }
+);
+
+server.tool(
+  "analyze_file_risk",
+  "Analyze the stability and risk level of a specific file based on Git history",
+  {
+    filename: z
+      .string()
+      .describe(
+        "Path to the file to analyze (e.g., 'packages/core/src/services/github.ts')"
+      ),
+  },
+  async ({ filename }) => {
+    const result = await handleFileRisk(filename);
+
+    return {
+      content: [{ type: "text", text: result }],
+    };
   }
 );
 
